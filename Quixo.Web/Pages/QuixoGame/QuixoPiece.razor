@@ -1,0 +1,41 @@
+﻿<div class="col-sm-2 text-center quixo-piece" @onclick="@((args) => OnClick(args))">
+    @if (Piece.IsCirclePiece)
+    {
+        <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="47.5" stroke="black" stroke-width="3" fill="none" />
+        </svg>
+    }
+    else if (Piece.IsCrossmarkPiece)
+    {
+        <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280.000000 1280.000000"
+             preserveAspectRatio="xMidYMid meet">
+            <metadata>
+                Created by potrace 1.15, written by Peter Selinger 2001-2017
+            </metadata>
+            <g transform="translate(50.000000,1265.000000) scale(0.095000,-0.095000)">
+                <path stroke-opacity="1" stroke="black" stroke-width="300" fill="none"
+                      d="M1217 11583 l-1217 -1218 1982 -1982 1983 -1983 -1983 -1983 -1982
+                    -1982 1217 -1218 1218 -1217 1982 1982 1983 1983 1983 -1983 1982 -1982 1218
+                    1217 1217 1218 -1982 1982 -1983 1983 1983 1983 1982 1982 -1217 1218 -1218
+                    1217 -1982 -1982 -1983 -1983 -1983 1983 -1982 1982 -1218 -1217z" />
+            </g>
+        </svg>
+    }
+    else
+    {
+
+    }
+</div>
+
+@code {
+    [Parameter]
+    public Quixo.Core.QuixoPiece Piece { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> Click { get; set; }
+
+    void OnClick(MouseEventArgs args)
+    {
+        Click.InvokeAsync(args);
+    }
+}

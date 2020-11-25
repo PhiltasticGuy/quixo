@@ -1,0 +1,74 @@
+﻿@page "/quixo"
+@using Quixo.Web.Shared
+@using Quixo.Core
+@inject QuixoBoardController BoardController
+
+<div class="container">
+    <h2>@Title</h2>
+    <div class="quixo-board row justify-content-center">
+        <div class="col-sm-8">
+            @for (int i = 0; i < BoardController.Pieces.Length;)
+            {
+                <div class="row justify-content-center">
+                    @{ int cols = 0; }
+                    @while (cols++ < 5 && i < BoardController.Pieces.Length)
+                    {
+                        int j = i;
+                        <QuixoPiece Piece="BoardController.Pieces[i++]" Click="(args) => Test(args, j)" @key="j"></QuixoPiece>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-4 text-center">
+            <button class="btn btn-primary" @onclick="SetCircles">Circles!</button>
+            <button class="btn btn-primary" @onclick="SetCrossmarks">Crossmarks!</button>
+            <button class="btn btn-primary" @onclick="ResetBoard">Reset</button>
+        </div>
+    </div>
+
+    @*<div class="row">
+        @for (int i = 0; i < pieces.Length; i++)
+        {
+            @if (i > 0 && i % 5 == 0)
+            {
+            @:</div><div class="row">
+            }
+
+            <QuixoPiece></QuixoPiece>
+        }
+    </div>*@
+</div>
+
+@code {
+    private string Title = "Test";
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        BoardController.SetCircles();
+    }
+
+    private void Test(MouseEventArgs e, int j)
+    {
+        Title = $"Piece #{j+1} clicked!";
+    }
+
+    private void SetCircles(MouseEventArgs e)
+    {
+        BoardController.SetCircles();
+    }
+
+    private void SetCrossmarks(MouseEventArgs e)
+    {
+        BoardController.SetCrossmarks();
+    }
+
+    private void ResetBoard(MouseEventArgs e)
+    {
+        BoardController.ResetGame();
+    }
+}
