@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quixo.Core;
-using Quixo.Web.Data;
 
 namespace Quixo.Web
 {
@@ -34,7 +33,6 @@ namespace Quixo.Web
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddTransient<QuixoBoardController>();
         }
 

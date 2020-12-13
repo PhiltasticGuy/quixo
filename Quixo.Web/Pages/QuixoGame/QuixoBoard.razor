@@ -5,6 +5,26 @@
 
 <div class="container">
     <h2>@Title</h2>
+    <div class="row justify-content-center">
+        <div class="col-sm-8">
+            <div class="row justify-content-center">
+                <div class="col-sm-3">
+                    <span class="font-weight-bold">Current Turn: </span>
+                </div>
+                <div class="col-sm-9">
+                    Player #@BoardController.CurrentPlayer.Id
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-3">
+                    <span class="font-weight-bold">Message: </span>
+                </div>
+                <div class="col-sm-9">
+                    @Message
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="quixo-board row justify-content-center">
         <div class="col-sm-8">
             @for (int i = 0; i < BoardController.Pieces.Length;)
@@ -13,8 +33,9 @@
                     @{ int cols = 0; }
                     @while (cols++ < 5 && i < BoardController.Pieces.Length)
                     {
-                        int j = i;
-                        <QuixoPiece Piece="BoardController.Pieces[i++]" Click="(args) => Test(args, j)" @key="j"></QuixoPiece>
+                        int j = i++;
+                        Core.QuixoPiece piece = BoardController.Pieces[j];
+                        <QuixoPiece Piece="piece" IsSelected="@(j == BoardController.SelectedPieceIndex)" Click="(args) => OnClickPiece(args, j)" @key="j"></QuixoPiece>
                     }
                 </div>
             }
@@ -23,9 +44,7 @@
 
     <div class="row justify-content-center">
         <div class="col-4 text-center">
-            <button class="btn btn-primary" @onclick="SetCircles">Circles!</button>
-            <button class="btn btn-primary" @onclick="SetCrossmarks">Crossmarks!</button>
-            <button class="btn btn-primary" @onclick="ResetBoard">Reset</button>
+            <button class="btn btn-primary" @onclick="OnResetBoard">Reset</button>
         </div>
     </div>
 
@@ -43,32 +62,23 @@
 </div>
 
 @code {
-    private string Title = "Test";
+    private string Title = "Wonderful Quixolicious Game";
+    private string Message = "Test";
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        BoardController.SetCircles();
     }
 
-    private void Test(MouseEventArgs e, int j)
+    private void OnClickPiece(MouseEventArgs e, int j)
     {
-        Title = $"Piece #{j+1} clicked!";
+        var result = BoardController.SelectPiece(j);
+
+        Message = result.Message;
     }
 
-    private void SetCircles(MouseEventArgs e)
+    private void OnResetBoard(MouseEventArgs e)
     {
-        BoardController.SetCircles();
-    }
-
-    private void SetCrossmarks(MouseEventArgs e)
-    {
-        BoardController.SetCrossmarks();
-    }
-
-    private void ResetBoard(MouseEventArgs e)
-    {
-        BoardController.ResetGame();
+        BoardController.ResetGameBoard();
     }
 }

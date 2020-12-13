@@ -1,4 +1,4 @@
-﻿<div class="col-sm-2 text-center quixo-piece" @onclick="@((args) => OnClick(args))">
+﻿<div class="col-sm-2 text-center quixo-piece @(IsSelected ? "selected" : "") @(Piece.IsValidMove ? "valid" : "")" @onclick="@((args) => OnClick(args))">
     @if (Piece.IsCirclePiece)
     {
         <svg viewBox="0 0 100 100">
@@ -23,13 +23,19 @@
     }
     else
     {
-
+        <svg viewBox="0 0 100 100"></svg>
     }
 </div>
 
 @code {
     [Parameter]
     public Quixo.Core.QuixoPiece Piece { get; set; }
+
+    [Parameter]
+    public bool IsSelected { get; set; } = false;
+
+    [Parameter]
+    public bool IsValidMove { get; set; } = false;
 
     [Parameter]
     public EventCallback<MouseEventArgs> Click { get; set; }
