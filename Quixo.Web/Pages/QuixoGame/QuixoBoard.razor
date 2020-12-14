@@ -1,73 +1,256 @@
 ﻿@page "/quixo"
 @using Quixo.Web.Shared
 @using Quixo.Core
+@using Quixo.Core.Players
 @inject QuixoBoardController BoardController
 
-<div class="container">
-    <h2>@Title</h2>
-    <div class="row justify-content-center">
-        <div class="col-sm-8">
-            <div class="row justify-content-center">
-                <div class="col-sm-3">
-                    <span class="font-weight-bold">Current Turn: </span>
+@if (!IsGameReady)
+{
+    <div class="container">
+        <h2>Nouvelle partie</h2>
+
+        <EditForm Model="@this" OnValidSubmit="@OnSelectPlayers">
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="form-row justify-content-center">
+                        <fieldset class="form-group col-md-8">
+                            <legend>Choisir le premier joueur:</legend>
+
+                            <InputRadioGroup Name="grpPlayer1" @bind-Value="TypePlayer1">
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer1" Value="PlayerType.Human" />Humain
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer1" Value="PlayerType.RandomAi" />IA - Mouvements aléatoires
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer1" Value="PlayerType.EasyAi" />IA - Facile
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer1" Value="PlayerType.HardAi" />IA - Difficile
+                                    </label>
+                                </div>
+                            </InputRadioGroup>
+                        </fieldset>
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    Player #@BoardController.CurrentPlayer.Id
+                <div class="col-md-6">
+                    <div class="form-row justify-content-center">
+                        <fieldset class="form-group col-md-8">
+                            <legend>Choisir le second joueur:</legend>
+
+                            <InputRadioGroup Name="grpPlayer2" @bind-Value="TypePlayer2">
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer2" Value="PlayerType.Human" />Humain
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer2" Value="PlayerType.RandomAi" />IA - Mouvements aléatoires
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer2" Value="PlayerType.EasyAi" />IA - Facile
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label>
+                                        <InputRadio Name="grpPlayer2" Value="PlayerType.HardAi" />IA - Difficile
+                                    </label>
+                                </div>
+                            </InputRadioGroup>
+                        </fieldset>
+                    </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-sm-3">
-                    <span class="font-weight-bold">Message: </span>
-                </div>
-                <div class="col-sm-9">
-                    @Message
-                </div>
+        </EditForm>
+
+        <div class="row justify-content-center">
+            <div class="col-4 text-center">
+                <button class="btn btn-primary" @onclick="OnSelectPlayers">Choisir ces joueurs</button>
             </div>
         </div>
     </div>
-    <div class="quixo-board row justify-content-center">
-        <div class="col-sm-8">
-            @for (int i = 0; i < BoardController.Pieces.Length;)
-            {
+}
+else
+{
+    <div class="container">
+        <h2>@Title</h2>
+        <div class="row justify-content-center">
+            <div class="col-sm-8">
                 <div class="row justify-content-center">
-                    @{ int cols = 0; }
-                    @while (cols++ < 5 && i < BoardController.Pieces.Length)
-                    {
-                        int j = i++;
-                        Core.QuixoPiece piece = BoardController.Pieces[j];
-                        <QuixoPiece Piece="piece" IsSelected="@(j == BoardController.SelectedPieceIndex)" Click="(args) => OnClickPiece(args, j)" @key="j"></QuixoPiece>
-                    }
+                    <div class="col-sm-3">
+                        <span class="font-weight-bold">Current Turn: </span>
+                    </div>
+                    <div class="col-sm-9">
+                        Player #@BoardController?.CurrentPlayer?.Id
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-sm-3">
+                        <span class="font-weight-bold">Message: </span>
+                    </div>
+                    <div class="col-sm-9">
+                        @Message
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="quixo-board row justify-content-center">
+            <div class="col-sm-8">
+                @for (int i = 0; i < BoardController.Board.Pieces.Length;)
+                {
+                    <div class="row justify-content-center">
+                        @{ int cols = 0; }
+                        @while (cols++ < 5 && i < BoardController.Board.Pieces.Length)
+                        {
+                            int j = i++;
+                            Core.QuixoPiece piece = BoardController.Board.Pieces[j];
+                            <QuixoPiece Piece="piece" IsSelected="@(j == BoardController.SelectedPieceIndex)" Click="(args) => OnClickPiece(args, j)" @key="j"></QuixoPiece>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            @if (!BoardController.IsGameRunning)
+            {
+                <div class="col-4 text-center">
+                    <button class="btn btn-primary" @onclick="OnStartGame">Lancer la partie!</button>
+                </div>
+            }
+            else
+            {
+                <div class="col-4 text-center">
+                    <button class="btn btn-primary" @onclick="OnReset">Recommencer cette partie</button>
+                </div>
+                <div class="col-4 text-center">
+                    <button class="btn btn-primary" @onclick="OnNewGame">Créer une nouvelle partie</button>
                 </div>
             }
         </div>
+
+        @*<div class="row">
+                @for (int i = 0; i < pieces.Length; i++)
+                {
+                    @if (i > 0 && i % 5 == 0)
+                    {
+                    @:</div><div class="row">
+                    }
+
+                    <QuixoPiece></QuixoPiece>
+                }
+            </div>*@
     </div>
-
-    <div class="row justify-content-center">
-        <div class="col-4 text-center">
-            <button class="btn btn-primary" @onclick="OnResetBoard">Reset</button>
-        </div>
-    </div>
-
-    @*<div class="row">
-        @for (int i = 0; i < pieces.Length; i++)
-        {
-            @if (i > 0 && i % 5 == 0)
-            {
-            @:</div><div class="row">
-            }
-
-            <QuixoPiece></QuixoPiece>
-        }
-    </div>*@
-</div>
+}
 
 @code {
     private string Title = "Wonderful Quixolicious Game";
     private string Message = "Test";
+    private bool IsGameReady { get; set; }
+    private PlayerType TypePlayer1 { get; set; } = PlayerType.Human;
+    private PlayerType TypePlayer2 { get; set; } = PlayerType.Human;
+
+    private System.Timers.Timer _timer;
+
+    public enum PlayerType { Human, RandomAi, EasyAi, HardAi }
 
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        // Pour les joueurs IA.
+        _timer = new System.Timers.Timer(500);
+        _timer.Elapsed += async (s, e) =>
+        {
+            await InvokeAsync(StateHasChanged);
+        };
+    }
+
+    private void OnSelectPlayers()
+    {
+        Player player1;
+        if (TypePlayer1 == PlayerType.Human)
+        {
+            player1 = new HumanPlayer(1, "Regular Joe", PieceType.Circle);
+        }
+        else if (TypePlayer1 == PlayerType.RandomAi)
+        {
+            player1 = new RandomAiPlayer(1, "Random Andy", PieceType.Circle);
+        }
+        else if (TypePlayer1 == PlayerType.EasyAi)
+        {
+            player1 = new MinMaxAiPlayer(1, "Easy iPlayer", PieceType.Circle);
+        }
+        else if (TypePlayer1 == PlayerType.HardAi)
+        {
+            player1 = new MinMaxAiPlayer(1, "Hard iPlayer", PieceType.Circle);
+        }
+        else
+        {
+            player1 = new RandomAiPlayer(1, "Random Andy", PieceType.Circle);
+        }
+
+        Player player2;
+        if (TypePlayer2 == PlayerType.Human)
+        {
+            player2 = new HumanPlayer(2, "Regular Joe", PieceType.Crossmark);
+        }
+        else if (TypePlayer2 == PlayerType.RandomAi)
+        {
+            player2 = new RandomAiPlayer(2, "Random Andy", PieceType.Crossmark);
+        }
+        else if (TypePlayer2 == PlayerType.EasyAi)
+        {
+            player2 = new MinMaxAiPlayer(2, "Easy iPlayer", PieceType.Crossmark);
+        }
+        else if (TypePlayer2 == PlayerType.HardAi)
+        {
+            player2 = new MinMaxAiPlayer(2, "Hard iPlayer", PieceType.Crossmark);
+        }
+        else
+        {
+            player2 = new RandomAiPlayer(2, "Random Andy", PieceType.Crossmark);
+        }
+
+        BoardController.PrepareNewGame();
+        BoardController.SetPlayer1(player1);
+        BoardController.SetPlayer2(player2);
+        IsGameReady = true;
+    }
+
+    private void OnStartGame()
+    {
+        BoardController.StartGame();
+
+        if (!BoardController.HasHumanPlayers)
+        {
+            // TODO: Find a nice way to gracefully stop this timer on a win.
+            _timer.Enabled = true;
+        }
+    }
+
+    private void OnReset(MouseEventArgs e)
+    {
+        _timer.Enabled = false;
+        BoardController.RestartCurrentGame();
+    }
+
+    private void OnNewGame(MouseEventArgs e)
+    {
+        _timer.Enabled = false;
+        IsGameReady = false;
+        BoardController.PrepareNewGame();
     }
 
     private void OnClickPiece(MouseEventArgs e, int j)
@@ -75,10 +258,5 @@
         var result = BoardController.SelectPiece(j);
 
         Message = result.Message;
-    }
-
-    private void OnResetBoard(MouseEventArgs e)
-    {
-        BoardController.ResetGameBoard();
     }
 }
