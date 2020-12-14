@@ -36,11 +36,11 @@ namespace Quixo.Core.Players
             }
             else if (playerType == PlayerType.EasyAi)
             {
-                return CreateMinMaxAiPlayer(id, name, pieceType);
+                return CreateEasyAiPlayer(id, name, pieceType);
             }
             else if (playerType == PlayerType.HardAi)
             {
-                return CreateMinMaxAiPlayer(id, name, pieceType);
+                return CreateHardAiPlayer(id, name, pieceType);
             }
             else
             {
@@ -58,9 +58,14 @@ namespace Quixo.Core.Players
             return new RandomAiPlayer(id, name, pieceType);
         }
 
-        public Player CreateMinMaxAiPlayer(int id, string name, PieceType pieceType)
+        public Player CreateEasyAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType);
+            return new MinMaxAiPlayer(id, name, pieceType, 1);
+        }
+
+        public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
+        {
+            return new MinMaxAiPlayer(id, name, pieceType, 3);
         }
     }
 }

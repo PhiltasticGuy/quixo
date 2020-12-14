@@ -34,7 +34,7 @@ namespace Quixo.Core.Tests
         }
 
         [Fact]
-        private void TestAiWinLose_MakeOpponentLine()
+        private void TestAiWinLose_PreventMakingOpponentWin_EdgeCase()
         {
             var board = new QuixoBoard();
             board.Pieces[21].PieceType = PieceType.Crossmark;
@@ -57,7 +57,7 @@ namespace Quixo.Core.Tests
         }
 
         [Fact]
-        private void TestWinMoveBlockSimplest()
+        private void TestAiBlock_SimpleExample()
         {
             var board = new QuixoBoard();
             board.Pieces[10].PieceType = PieceType.Crossmark;
@@ -78,7 +78,7 @@ namespace Quixo.Core.Tests
         }
 
         [Fact]
-        private void TestWinMoveBlock()
+        private void TestAiBlock_LastColumn()
         {
             var board = new QuixoBoard();
             board.Pieces[0].PieceType = PieceType.Crossmark;
