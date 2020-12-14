@@ -244,6 +244,7 @@ namespace Quixo.Core
             while (IsGameRunning && CurrentPlayer.PlayTurn(_board) && CheckGameState() == null)
             {
                 _isPlayer1Turn = !_isPlayer1Turn;
+                Thread.Sleep(1000);
             }
         }
 

@@ -163,8 +163,6 @@ else
 
     private System.Timers.Timer _timer;
 
-    public enum PlayerType { Human, RandomAi, EasyAi, HardAi }
-
     protected async override Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -179,49 +177,18 @@ else
 
     private void OnSelectPlayers()
     {
-        Player player1;
-        if (TypePlayer1 == PlayerType.Human)
-        {
-            player1 = new HumanPlayer(1, "Regular Joe", PieceType.Circle);
-        }
-        else if (TypePlayer1 == PlayerType.RandomAi)
-        {
-            player1 = new RandomAiPlayer(1, "Random Andy", PieceType.Circle);
-        }
-        else if (TypePlayer1 == PlayerType.EasyAi)
-        {
-            player1 = new MinMaxAiPlayer(1, "Easy iPlayer", PieceType.Circle);
-        }
-        else if (TypePlayer1 == PlayerType.HardAi)
-        {
-            player1 = new MinMaxAiPlayer(1, "Hard iPlayer", PieceType.Circle);
-        }
-        else
-        {
-            player1 = new RandomAiPlayer(1, "Random Andy", PieceType.Circle);
-        }
-
-        Player player2;
-        if (TypePlayer2 == PlayerType.Human)
-        {
-            player2 = new HumanPlayer(2, "Regular Joe", PieceType.Crossmark);
-        }
-        else if (TypePlayer2 == PlayerType.RandomAi)
-        {
-            player2 = new RandomAiPlayer(2, "Random Andy", PieceType.Crossmark);
-        }
-        else if (TypePlayer2 == PlayerType.EasyAi)
-        {
-            player2 = new MinMaxAiPlayer(2, "Easy iPlayer", PieceType.Crossmark);
-        }
-        else if (TypePlayer2 == PlayerType.HardAi)
-        {
-            player2 = new MinMaxAiPlayer(2, "Hard iPlayer", PieceType.Crossmark);
-        }
-        else
-        {
-            player2 = new RandomAiPlayer(2, "Random Andy", PieceType.Crossmark);
-        }
+        Player player1 = PlayerFactory.Instance().CreatePlayer(
+            TypePlayer1,
+            1,
+            "Player #1",
+            PieceType.Circle
+        );
+        Player player2 = PlayerFactory.Instance().CreatePlayer(
+             TypePlayer2,
+             2,
+             "Player #2",
+             PieceType.Crossmark
+         );
 
         BoardController.PrepareNewGame();
         BoardController.SetPlayer1(player1);
