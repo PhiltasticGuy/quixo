@@ -8,16 +8,14 @@ namespace Quixo.Core.AI
 {
     public class MaxNode : Node
     {
-        public MaxNode(Move move, PieceType pieceType, int depth) : base(move, pieceType, depth)
+        public MaxNode(Move move, PieceType playerPieceType, int depth)
+            : base(move, playerPieceType, depth)
         {
         }
 
-        protected override int GetWinValue(PieceType winningPieceType) => (winningPieceType == PieceType ? int.MaxValue : int.MinValue);
+        public override PieceType GetCurrentMovePieceType() => PlayerPieceType;
         public override int CompareValues(int v1, int v2) => Math.Max(v1, v2);
-        public override Node CreateChild(Move move, int depth)
-        {
-            return new MinNode(move, OpponentPieceType, depth);
-        }
+        public override Node CreateChild(Move move, int depth) => new MinNode(move, PlayerPieceType, depth);
 
         public override Move PickBestMoveFromChildren()
         {

@@ -7,42 +7,141 @@ namespace Quixo.Core.AI
     public abstract class Node
     {
         public int Depth { get; set; }
-        public Move Move { get; set; }
-        public PieceType PieceType { get; set; }
         public int Value { get; set; }
+        public PieceType PlayerPieceType { get; set; }
+        public PieceType OpponentPieceType => (PlayerPieceType == PieceType.Circle ? PieceType.Crossmark : PieceType.Circle);
+        public Move Move { get; set; }
         public List<Node> Children { get; set; }
 
-        public Node(Move move, PieceType pieceType, int depth)
+        public Node(Move move, PieceType playerPieceType, int depth)
         {
-            Move = move;
-            PieceType = pieceType;
             Depth = depth;
+            PlayerPieceType = playerPieceType;
+            Move = move;
             Children = new List<Node>();
         }
 
-        public PieceType OpponentPieceType => (PieceType == PieceType.Circle ? PieceType.Crossmark : PieceType.Circle);
-        protected int GetWinValue() => GetWinValue(PieceType);
-
-        protected abstract int GetWinValue(PieceType winningPieceType);
+        public abstract PieceType GetCurrentMovePieceType();
         public abstract int CompareValues(int v1, int v2);
         public abstract Node CreateChild(Move move, int depth);
         public abstract Move PickBestMoveFromChildren();
 
-        private bool IsVictoryNode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Evalute(QuixoBoard board)
+        public int Evaluate(QuixoBoard board)
         {
             var winner = board.GetWinner();
-            if (winner != PieceType.Empty)
+            if (winner == PlayerPieceType)
             {
-                return GetWinValue(winner) - this.Depth;
+                return int.MaxValue;
+            }
+            else if (winner == OpponentPieceType)
+            {
+                return int.MinValue;
             }
 
-            int random = new Random().Next(100000);
-            return random;
+            //int value = new Random().Next(100000);
+
+            int valueMax = EvaluateRows(board, PlayerPieceType) + 
+                EvaluateColumns(board, PlayerPieceType) + 
+                EvaluateDiagonals(board, PlayerPieceType);
+
+            int valueMin = EvaluateRows(board, OpponentPieceType) +
+                EvaluateColumns(board, OpponentPieceType) +
+                EvaluateDiagonals(board, OpponentPieceType);
+
+            return valueMax - valueMin;
+        }
+
+        private int EvaluateRows(QuixoBoard board, PieceType pieceType)
+        {
+            var value = 0;
+            int count = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    int index = i * 5 + j;
+                    if (board.Pieces[index].PieceType == pieceType)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        value += count;
+                        count = 0;
+                    }
+                }
+            }
+
+            value += count;
+
+            return value;
+        }
+
+        private int EvaluateColumns(QuixoBoard board, PieceType pieceType)
+        {
+            var value = 0;
+            int count = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    int index = j * 5 + i;
+                    if (board.Pieces[index].PieceType == pieceType)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        value += count;
+                        count = 0;
+                    }
+                }
+            }
+
+            value += count;
+
+            return value;
+        }
+
+        private int EvaluateDiagonals(QuixoBoard board, PieceType pieceType)
+        {
+            var value = 0;
+
+            int count = 0;
+            for (int i = 0; i < 5; i++)
+            {
+                if (board.Pieces[i * 5 + i].PieceType == pieceType)
+                {
+                    count++;
+                }
+                else
+                {
+                    value += count;
+                    count = 0;
+                }
+            }
+
+            value += count;
+            count = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (board.Pieces[(i + 1) * 4].PieceType == pieceType)
+                {
+                    count++;
+                }
+                else
+                {
+                    value += count;
+                    count = 0;
+                }
+            }
+
+            value += count;
+
+            return value;
         }
     }
 }
