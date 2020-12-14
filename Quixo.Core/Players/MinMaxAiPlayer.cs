@@ -9,20 +9,28 @@ namespace Quixo.Core.Players
 {
     public class MinMaxAiPlayer : ComputerPlayer
     {
-        private const int MaxDepth = 2;
+        private static int _maxDepth = 1;
+
+        public static int MaxDepth => _maxDepth;
 
         public MinMaxAiPlayer(int id, string name, PieceType pieceType)
             : base(id, name, pieceType)
         {
         }
 
+        public MinMaxAiPlayer(int id, string name, PieceType pieceType, int depth)
+            : base(id, name, pieceType)
+        {
+            _maxDepth = depth;
+        }
+
         public override bool PlayTurn(QuixoBoard board)
         {
             //var tree = BuildDecisionTree(board);
 
-            Node root = new Node(null, true);
-            MinMax(board, root, MaxDepth);
-            Move bestMove = root.GetBestMove();
+            Node root = new MaxNode(null, PieceType, 0);
+            MinMax(board, root);
+            Move bestMove = root.PickBestMoveFromChildren();
             board.Play(bestMove, this.PieceType);
 
             Console.WriteLine($"{this.Name}: Piece #{bestMove.Index + 1}, {bestMove.Direction}");
@@ -46,60 +54,33 @@ namespace Quixo.Core.Players
             }
         }
 
-        private int MinMax(QuixoBoard board, Node node, int depth)
+        private int MinMax(QuixoBoard board, Node node)
         {
             PieceType winner = board.GetWinner();
 
-            if (depth == 0 || winner != PieceType.Empty)
+            if (node.Depth == MinMaxAiPlayer.MaxDepth || winner != PieceType.Empty)
             {
-                return Evaluate(board, node, winner);
+                node.Value = node.Evalute(board);
+                return node.Value;
             }
 
-            PieceType nodePieceType;
-            if (node.IsMaxPlayer)
+            // Charger la liste de mouvements possibles pour ce joueur.
+            var moves = board.GetValidMoves(node.PieceType);
+
+            var value = 0;
+            foreach (var move in moves)
             {
-                nodePieceType = this.PieceType;
+                QuixoBoard copy = board.DeepClone();
+                copy.Play(move, node.PieceType);
+
+                var child = node.CreateChild(move, node.Depth + 1);
+                node.Children.Add(child);
+
+                value = node.CompareValues(value, MinMax(copy, child));
             }
-            else
-            {
-                nodePieceType = (this.PieceType == PieceType.Circle ? PieceType.Crossmark : PieceType.Circle);
-            }
-            var moves = board.GetValidMoves(nodePieceType);
+            node.Value = value;
 
-            if (node.IsMaxPlayer)
-            {
-                var value = int.MinValue;
-
-                foreach (var move in moves)
-                {
-                    QuixoBoard copy = board.DeepClone();
-                    copy.Play(move, nodePieceType);
-
-                    var child = new Node(move, !node.IsMaxPlayer);
-                    node.Children.Add(child);
-
-                    value = Math.Max(value, MinMax(copy, child, depth - 1));
-                }
-
-                return value;
-            }
-            else
-            {
-                var value = int.MaxValue;
-
-                foreach (var move in moves)
-                {
-                    QuixoBoard copy = board.DeepClone();
-                    copy.Play(move, nodePieceType);
-
-                    var child = new Node(move, !node.IsMaxPlayer);
-                    node.Children.Add(child);
-
-                    value = Math.Min(value, MinMax(copy, child, depth - 1));
-                }
-
-                return value;
-            }
+            return node.Value;
         }
 
         private int Evaluate(QuixoBoard board, Node node, PieceType winningPiece)

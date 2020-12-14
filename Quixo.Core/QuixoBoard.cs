@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Quixo.Core
@@ -103,6 +104,11 @@ namespace Quixo.Core
 
         public void Play(Move move, PieceType pieceType)
         {
+            if (Pieces[move.Index].PieceType != PieceType.Empty && Pieces[move.Index].PieceType != pieceType)
+            {
+                throw new InvalidOperationException();
+            }
+
             int rowStart = move.Index / 5;
             int colStart = move.Index % 5;
             int indexEnd = -1;

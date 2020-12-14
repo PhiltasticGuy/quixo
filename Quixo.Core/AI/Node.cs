@@ -1,66 +1,48 @@
-﻿using System.Collections.Generic;
+﻿using Quixo.Core.Players;
+using System;
+using System.Collections.Generic;
 
 namespace Quixo.Core.AI
 {
-    public class Node
+    public abstract class Node
     {
+        public int Depth { get; set; }
         public Move Move { get; set; }
-
         public PieceType PieceType { get; set; }
-
-        public bool IsMaxPlayer { get; set; }
-
         public int Value { get; set; }
-
-        public bool IsVictoryNode => (IsMaxPlayer ? Value == int.MaxValue : Value == int.MinValue);
-
         public List<Node> Children { get; set; }
 
-        public Node(Move move, bool isMaxPlayer)
-        {
-            Move = move;
-            IsMaxPlayer = isMaxPlayer;
-            Children = new List<Node>();
-        }
-
-        public Node(Move move, PieceType pieceType, bool isMaxPlayer)
+        public Node(Move move, PieceType pieceType, int depth)
         {
             Move = move;
             PieceType = pieceType;
-            IsMaxPlayer = isMaxPlayer;
+            Depth = depth;
             Children = new List<Node>();
         }
 
-        public Move GetBestMove()
+        public PieceType OpponentPieceType => (PieceType == PieceType.Circle ? PieceType.Crossmark : PieceType.Circle);
+        protected int GetWinValue() => GetWinValue(PieceType);
+
+        protected abstract int GetWinValue(PieceType winningPieceType);
+        public abstract int CompareValues(int v1, int v2);
+        public abstract Node CreateChild(Move move, int depth);
+        public abstract Move PickBestMoveFromChildren();
+
+        private bool IsVictoryNode()
         {
-            if (IsMaxPlayer)
+            throw new NotImplementedException();
+        }
+
+        public int Evalute(QuixoBoard board)
+        {
+            var winner = board.GetWinner();
+            if (winner != PieceType.Empty)
             {
-                Node max = null;
-
-                foreach (Node node in Children)
-                {
-                    if (max == null || node.Value > max.Value)
-                    {
-                        max = node;
-                    }
-                }
-
-                return max.Move;
+                return GetWinValue(winner) - this.Depth;
             }
-            else
-            {
-                Node min = null;
 
-                foreach (Node node in Children)
-                {
-                    if (min == null || node.Value < min.Value)
-                    {
-                        min = node;
-                    }
-                }
-
-                return min.Move;
-            }
+            int random = new Random().Next(100000);
+            return random;
         }
     }
 }

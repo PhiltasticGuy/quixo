@@ -237,50 +237,5 @@ namespace Quixo.Core
                 _board.Pieces[bottom].IsValidMove = !_board.Pieces[bottom].IsValidMove;
             }
         }
-
-        private void TestWinMoveCrossmark()
-        {
-            _board.Pieces[0].PieceType = PieceType.Crossmark;
-            _board.Pieces[5].PieceType = PieceType.Crossmark;
-            _board.Pieces[10].PieceType = PieceType.Crossmark;
-            _board.Pieces[20].PieceType = PieceType.Crossmark;
-            _board.Pieces[2].PieceType = PieceType.Circle;
-            _board.Pieces[3].PieceType = PieceType.Circle;
-            _board.Pieces[4].PieceType = PieceType.Circle;
-            _board.Pieces[9].PieceType = PieceType.Circle;
-            _board.Pieces[14].PieceType = PieceType.Circle;
-
-            _player2 = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
-            _player2.PlayTurn(_board);
-        }
-
-        private void TestWinMoveBlockSimplest()
-        {
-            _board.Pieces[10].PieceType = PieceType.Crossmark;
-            _board.Pieces[15].PieceType = PieceType.Crossmark;
-            _board.Pieces[20].PieceType = PieceType.Crossmark;
-            _board.Pieces[4].PieceType = PieceType.Circle;
-            _board.Pieces[9].PieceType = PieceType.Circle;
-            _board.Pieces[14].PieceType = PieceType.Circle;
-            _board.Pieces[19].PieceType = PieceType.Circle;
-
-            _player2 = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
-            _player2.PlayTurn(_board);
-        }
-        private void TestWinMoveBlock()
-        {
-            _board.Pieces[0].PieceType = PieceType.Crossmark;
-            _board.Pieces[5].PieceType = PieceType.Crossmark;
-            _board.Pieces[10].PieceType = PieceType.Crossmark;
-            _board.Pieces[1].PieceType = PieceType.Crossmark;
-            _board.Pieces[20].PieceType = PieceType.Circle;
-            _board.Pieces[4].PieceType = PieceType.Circle;
-            _board.Pieces[9].PieceType = PieceType.Circle;
-            _board.Pieces[14].PieceType = PieceType.Circle;
-            _board.Pieces[24].PieceType = PieceType.Circle;
-
-            _player2 = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
-            _player2.PlayTurn(_board);
-        }
     }
 }
