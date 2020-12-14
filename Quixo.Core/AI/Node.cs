@@ -38,8 +38,6 @@ namespace Quixo.Core.AI
                 return int.MinValue;
             }
 
-            //int value = new Random().Next(100000);
-
             int valueMax = EvaluateRows(board, PlayerPieceType) + 
                 EvaluateColumns(board, PlayerPieceType) + 
                 EvaluateDiagonals(board, PlayerPieceType);
