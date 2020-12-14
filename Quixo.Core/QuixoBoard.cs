@@ -1,20 +1,16 @@
-﻿using Quixo.Core.Players;
-using Quixo.Core.Results;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quixo.Core
 {
     public class QuixoBoard
     {
+        private const int Width = 5;
         private readonly int[] _perimeterIndexes = {
-            0, 1, 2, 3, 4,
-            5, 9,
-            10, 14,
-            15, 19,
+             0,  1,  2,  3,  4,
+             5,              9,
+            10,             14,
+            15,             19,
             20, 21, 22, 23, 24 };
 
         public QuixoPiece[] Pieces { get; }
@@ -29,47 +25,58 @@ namespace Quixo.Core
             }
         }
 
-        public QuixoPiece GetPieceAt(int value)
-        {
-            return Pieces[value];
-        }
-
         public QuixoBoard(QuixoPiece[] pieces)
         {
             Pieces = pieces;
+        }
+
+        public bool IsPerimeterPiece(int index)
+        {
+            return _perimeterIndexes.Contains(index);
+        }
+
+        public QuixoBoard DeepClone()
+        {
+            QuixoPiece[] pieces = new QuixoPiece[25];
+
+            for (int i = 0; i < Pieces.Length; i++)
+            {
+                pieces[i] = new QuixoPiece(Pieces[i].PieceType);
+            }
+
+            return new QuixoBoard(pieces);
         }
 
         public List<Move> GetValidMoves(PieceType pieceType)
         {
             var moves = new List<Move>();
 
-            const int width = 5;
             foreach (var i in _perimeterIndexes)
             {
                 if (Pieces[i].PieceType == PieceType.Empty || Pieces[i].PieceType == pieceType)
                 {
-                    if (i < width)
+                    if (i < Width)
                     {
                         moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftUp });
 
-                        if (i % width != 0)
+                        if (i % Width != 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftRight });
                         }
-                        if ((i + 1) % width != 0)
+                        if ((i + 1) % Width != 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftLeft });
                         }
                     }
-                    else if ((i + width) >= Pieces.Length)
+                    else if ((i + Width) >= Pieces.Length)
                     {
                         moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftDown });
 
-                        if (i % width != 0)
+                        if (i % Width != 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftRight });
                         }
-                        if ((i + 1) % width != 0)
+                        if ((i + 1) % Width != 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftLeft });
                         }
@@ -79,11 +86,11 @@ namespace Quixo.Core
                         moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftUp });
                         moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftDown });
 
-                        if (i % width == 0)
+                        if (i % Width == 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftLeft });
                         }
-                        else if ((i + 1) % width == 0)
+                        else if ((i + 1) % Width == 0)
                         {
                             moves.Add(new Move() { Index = i, Direction = MoveDirection.ShiftRight });
                         }
@@ -138,18 +145,6 @@ namespace Quixo.Core
             }
 
             Pieces[indexEnd].PieceType = pieceType;
-        }
-
-        public QuixoBoard DeepClone()
-        {
-            QuixoPiece[] pieces = new QuixoPiece[25];
-
-            for (int i = 0; i < Pieces.Length; i++)
-            {
-                pieces[i] = new QuixoPiece(Pieces[i].PieceType);
-            }
-
-            return new QuixoBoard(pieces);
         }
 
         public bool CheckPieceWin(PieceType pieceType)

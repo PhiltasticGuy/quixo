@@ -8,6 +8,11 @@ namespace Quixo.Core.Players
 {
     public class RandomAiPlayer : ComputerPlayer
     {
+        public RandomAiPlayer(int id, string name, PieceType pieceType)
+            : base(id, name, pieceType)
+        {
+        }
+
         public override bool PlayTurn(QuixoBoard board)
         {
             var moves = board.GetValidMoves(this.PieceType);
@@ -19,11 +24,6 @@ namespace Quixo.Core.Players
             Console.WriteLine($"{this.Name}: Piece #{selectedMove.Index + 1}, {selectedMove.Direction}");
 
             return true;
-        }
-        
-        public RandomAiPlayer(int id, string name, PieceType pieceType)
-            : base(id, name, pieceType)
-        {
         }
     }
 }

@@ -1,40 +1,23 @@
 ﻿using Quixo.Core.Players;
 using Quixo.Core.Results;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Quixo.Core
 {
     public class QuixoBoardController
     {
         private QuixoBoard _board;
-
-        public QuixoBoard Board => _board;
-        public bool IsGameRunning { get; set; }
-
-        private readonly int[] _validSelectIndexes = {
-            0, 1, 2, 3, 4,
-            5, 9,
-            10, 14,
-            15, 19,
-            20, 21, 22, 23, 24 };
-
-        //public QuixoPiece[] Pieces { get; }
-
-        private int? _selectedPieceIndex;
-        public int? SelectedPieceIndex => _selectedPieceIndex;
-        public QuixoPiece SelectedPiece => (_selectedPieceIndex == null ? null : _board.GetPieceAt(_selectedPieceIndex.Value));
-
+        private bool _isGameRunning;
         private bool _isPlayer1Turn;
         private Player _player1;
         private Player _player2;
+        private int? _selectedPieceIndex;
 
-        public bool HasHumanPlayers => _player1?.IsHuman == true || _player2?.IsHuman == true;
-
+        public bool IsGameRunning => _isGameRunning;
+        public int? SelectedPieceIndex => _selectedPieceIndex;
+        public QuixoPiece SelectedPiece => (_selectedPieceIndex == null ? null : _board.Pieces[_selectedPieceIndex.Value]);
         public Player CurrentPlayer => (_isPlayer1Turn ? _player1 : _player2);
         public Player OtherPlayer => (!_isPlayer1Turn ? _player1 : _player2);
 
@@ -45,9 +28,11 @@ namespace Quixo.Core
             PrepareNewGame();
         }
 
+        public bool HasHumanPlayers() => _player1?.IsHuman == true || _player2?.IsHuman == true;
         public void SetPlayer1(Player player) => _player1 = player;
-
         public void SetPlayer2(Player player) => _player2 = player;
+        public QuixoPiece GetPiece(int index) => _board.Pieces[index];
+        public int GetTotalPieces() => _board.Pieces.Length;
 
         public ControllerResult SelectPiece(int index)
         {
@@ -71,14 +56,14 @@ namespace Quixo.Core
                 }
                 else
                 {
-                    if (!_board.GetPieceAt(index).IsValidMove)
+                    if (!_board.Pieces[index].IsValidMove)
                     {
                         return new ErrorResult("Vous devez choisir une case valide pour votre pièce, ou la désélectionner!");
                     }
 
                     // Désactiver les guides de cases valides.
                     toggleValidMoves(_selectedPieceIndex.Value);
-                    _board.GetPieceAt(_selectedPieceIndex.Value).IsSelected = false;
+                    _board.Pieces[_selectedPieceIndex.Value].IsSelected = false;
 
                     //PlacePiece(index);
                     int rowStart = _selectedPieceIndex.Value / 5;
@@ -136,16 +121,16 @@ namespace Quixo.Core
             else
             {
                 // S'assurer que la pièce choisie se trouve sur le périmètre.
-                if (!_validSelectIndexes.Contains(index))
+                if (!_board.IsPerimeterPiece(index))
                 {
                     return new ErrorResult("Vous devez choisir une pièce sur le périmètre!");
                 }
                 // Si la pièce choisie n'est pas vide...
-                else if (!_board.GetPieceAt(index).IsEmptyPiece)
+                else if (!_board.Pieces[index].IsEmptyPiece)
                 {
                     // S'assurer que la pièce choisie correspond au jeton du joueur.
-                    if ((_board.GetPieceAt(index).IsCirclePiece && CurrentPlayer.PieceType != PieceType.Circle) ||
-                        (_board.GetPieceAt(index).IsCrossmarkPiece && CurrentPlayer.PieceType != PieceType.Crossmark))
+                    if ((_board.Pieces[index].IsCirclePiece && CurrentPlayer.PieceType != PieceType.Circle) ||
+                        (_board.Pieces[index].IsCrossmarkPiece && CurrentPlayer.PieceType != PieceType.Crossmark))
                     {
                         return new ErrorResult("Vous devez choisir une de vos pièces!");
                     }
@@ -156,6 +141,33 @@ namespace Quixo.Core
 
                 return new PieceSelectedResult(_selectedPieceIndex);
             }
+        }
+
+        public void RestartCurrentGame()
+        {
+            _isGameRunning = false;
+
+            _isPlayer1Turn = true;
+            _player1.IsInputRequired = false;
+            _player2.IsInputRequired = false;
+            _board.Reset();
+        }
+
+        public void PrepareNewGame()
+        {
+            _isGameRunning = false;
+
+            _player1 = null;
+            _player2 = null;
+            _isPlayer1Turn = true;
+            _board.Reset();
+        }
+
+        public void StartGame()
+        {
+            _isGameRunning = true;
+
+            new Thread(_ => HandleTurns()).Start();
         }
 
         private Player CheckGameState()
@@ -184,6 +196,15 @@ namespace Quixo.Core
             return winner;
         }
 
+        private void HandleTurns()
+        {
+            while (IsGameRunning && CurrentPlayer.PlayTurn(_board) && CheckGameState() == null)
+            {
+                _isPlayer1Turn = !_isPlayer1Turn;
+                Thread.Sleep(1000);
+            }
+        }
+
         private void toggleValidMoves(int selectedPieceIndex)
         {
             int row = selectedPieceIndex / 5;
@@ -196,55 +217,19 @@ namespace Quixo.Core
 
             if (left != selectedPieceIndex)
             {
-                _board.GetPieceAt(left).IsValidMove = !_board.GetPieceAt(left).IsValidMove;
+                _board.Pieces[left].IsValidMove = !_board.Pieces[left].IsValidMove;
             }
             if (right != selectedPieceIndex)
             {
-                _board.GetPieceAt(right).IsValidMove = !_board.GetPieceAt(right).IsValidMove;
+                _board.Pieces[right].IsValidMove = !_board.Pieces[right].IsValidMove;
             }
             if (top != selectedPieceIndex)
             {
-                _board.GetPieceAt(top).IsValidMove = !_board.GetPieceAt(top).IsValidMove;
+                _board.Pieces[top].IsValidMove = !_board.Pieces[top].IsValidMove;
             }
             if (bottom != selectedPieceIndex)
             {
-                _board.GetPieceAt(bottom).IsValidMove = !_board.GetPieceAt(bottom).IsValidMove;
-            }
-        }
-
-        public void RestartCurrentGame()
-        {
-            IsGameRunning = false;
-
-            _isPlayer1Turn = true;
-            _player1.IsInputRequired = false;
-            _player2.IsInputRequired = false;
-            _board.Reset();
-        }
-
-        public void PrepareNewGame()
-        {
-            IsGameRunning = false;
-
-            _player1 = null;
-            _player2 = null;
-            _isPlayer1Turn = true;
-            _board.Reset();
-        }
-
-        public void StartGame()
-        {
-            IsGameRunning = true;
-
-            new Thread(_ => HandleTurns()).Start();
-        }
-
-        private void HandleTurns()
-        {
-            while (IsGameRunning && CurrentPlayer.PlayTurn(_board) && CheckGameState() == null)
-            {
-                _isPlayer1Turn = !_isPlayer1Turn;
-                Thread.Sleep(1000);
+                _board.Pieces[bottom].IsValidMove = !_board.Pieces[bottom].IsValidMove;
             }
         }
 

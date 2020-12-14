@@ -107,14 +107,14 @@ else
         </div>
         <div class="quixo-board row justify-content-center">
             <div class="col-sm-8">
-                @for (int i = 0; i < BoardController.Board.Pieces.Length;)
+                @for (int i = 0; i < BoardController.GetTotalPieces();)
                 {
                     <div class="row justify-content-center">
                         @{ int cols = 0; }
-                        @while (cols++ < 5 && i < BoardController.Board.Pieces.Length)
+                        @while (cols++ < 5 && i < BoardController.GetTotalPieces())
                         {
                             int j = i++;
-                            Core.QuixoPiece piece = BoardController.Board.Pieces[j];
+                            Core.QuixoPiece piece = BoardController.GetPiece(j);
                             <QuixoPiece Piece="piece" IsSelected="@(j == BoardController.SelectedPieceIndex)" Click="(args) => OnClickPiece(args, j)" @key="j"></QuixoPiece>
                         }
                     </div>
@@ -200,7 +200,7 @@ else
     {
         BoardController.StartGame();
 
-        if (!BoardController.HasHumanPlayers)
+        if (!BoardController.HasHumanPlayers())
         {
             // TODO: Find a nice way to gracefully stop this timer on a win.
             _timer.Enabled = true;
