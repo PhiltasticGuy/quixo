@@ -1,4 +1,5 @@
 ﻿using Quixo.Core.Players.AI;
+using Quixo.Core.Players.AI.MinMax;
 using System;
 
 namespace Quixo.Core.Players
@@ -61,17 +62,17 @@ namespace Quixo.Core.Players
 
         public Player CreateEasyAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new SingleThreadMinMaxAiPlayer(id, name, pieceType, 1);
+            return new MinMaxAiPlayer(id, name, pieceType, new SingleThreadMinMaxStrategy(1));
         }
 
         public Player CreateMediumAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MultiThreadMinMaxAiPlayer(id, name, pieceType, 3);
+            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(3));
         }
 
         public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MultiThreadMinMaxAiPlayer(id, name, pieceType, 4);
+            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(4));
         }
     }
 }

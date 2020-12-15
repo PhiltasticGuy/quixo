@@ -1,5 +1,6 @@
 using Quixo.Core.Players;
 using Quixo.Core.Players.AI;
+using Quixo.Core.Players.AI.MinMax;
 using System;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace Quixo.Core.Tests
         [InlineData(2)]
         [InlineData(3)]
         [InlineData(4)]
-        [InlineData(5)]
+        //[InlineData(5)]
         private void TestAiWin_1Move(int depth)
         {
             var board = new QuixoBoard();
@@ -28,7 +29,7 @@ namespace Quixo.Core.Tests
 
             var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new SingleThreadMinMaxAiPlayer(2, "AI", playerPieceType, depth);
+            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, new SingleThreadMinMaxStrategy(depth));
 
             player.PlayTurn(board);
 
@@ -50,9 +51,9 @@ namespace Quixo.Core.Tests
             board.Pieces[18].PieceType = PieceType.Circle;
             board.Pieces[19].PieceType = PieceType.Circle;
 
-            //var playerPieceType = PieceType.Crossmark;
+            var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, new SingleThreadMinMaxStrategy(3));
 
             player.PlayTurn(board);
 
@@ -71,9 +72,9 @@ namespace Quixo.Core.Tests
             board.Pieces[14].PieceType = PieceType.Circle;
             board.Pieces[19].PieceType = PieceType.Circle;
 
-            //var playerPieceType = PieceType.Crossmark;
+            var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, new SingleThreadMinMaxStrategy(3));
 
             player.PlayTurn(board);
 
@@ -94,9 +95,9 @@ namespace Quixo.Core.Tests
             board.Pieces[14].PieceType = PieceType.Circle;
             board.Pieces[24].PieceType = PieceType.Circle;
 
-            //var playerPieceType = PieceType.Crossmark;
+            var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, new SingleThreadMinMaxStrategy(3));
 
             player.PlayTurn(board);
 

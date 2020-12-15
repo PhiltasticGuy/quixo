@@ -3,26 +3,20 @@ using System;
 
 namespace Quixo.Core.Players.AI
 {
-    public abstract class MinMaxAiPlayer : ComputerPlayer
+    public class MinMaxAiPlayer : ComputerPlayer
     {
-        protected readonly int _maxDepth = 3;
-        public int MaxDepth => _maxDepth;
+        protected readonly MinMaxStrategy _minMaxStrategy;
 
-        public MinMaxAiPlayer(int id, string name, PieceType pieceType)
+        public MinMaxAiPlayer(int id, string name, PieceType pieceType, MinMaxStrategy minMaxStrategy)
             : base(id, name, pieceType)
         {
-        }
-
-        public MinMaxAiPlayer(int id, string name, PieceType pieceType, int depth)
-            : base(id, name, pieceType)
-        {
-            _maxDepth = depth;
+            _minMaxStrategy = minMaxStrategy;
         }
 
         public override bool PlayTurn(QuixoBoard board)
         {
             Node root = new MaxNode(null, PieceType, 0);
-            MinMax(board, root);
+            _minMaxStrategy.MinMax(board, root);
             Move bestMove = root.PickBestMoveFromChildren();
             board.Play(bestMove, this.PieceType);
 
@@ -30,7 +24,5 @@ namespace Quixo.Core.Players.AI
 
             return true;
         }
-
-        protected abstract int MinMax(QuixoBoard board, Node node);
     }
 }

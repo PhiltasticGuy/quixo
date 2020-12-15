@@ -1,20 +1,17 @@
-﻿using Quixo.Core.Players.AI.MinMax;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Quixo.Core.Players.AI
+namespace Quixo.Core.Players.AI.MinMax
 {
-    public class SingleThreadMinMaxAiPlayer : MinMaxAiPlayer
+    public class SingleThreadMinMaxStrategy : MinMaxStrategy
     {
-        public SingleThreadMinMaxAiPlayer(int id, string name, PieceType pieceType)
-            : base(id, name, pieceType)
+        public SingleThreadMinMaxStrategy(int depth)
+            : base(depth)
         {
         }
 
-        public SingleThreadMinMaxAiPlayer(int id, string name, PieceType pieceType, int depth)
-            : base(id, name, pieceType, depth)
-        {
-        }
-
-        protected override int MinMax(QuixoBoard board, Node node)
+        public override int MinMax(QuixoBoard board, Node node)
         {
             PieceType winner = board.GetWinner();
 
