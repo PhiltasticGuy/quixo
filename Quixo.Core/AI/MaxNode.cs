@@ -23,13 +23,13 @@ namespace Quixo.Core.AI
 
             foreach (Node node in Children)
             {
-                if (best == null || node.Value > best.Value)
+                if (best == null || (node?.Value ?? 0) > best.Value)
                 {
                     best = node;
                 }
             }
 
-            return best.Move;
+            return best?.Move ?? this.Move;
         }
     }
 }

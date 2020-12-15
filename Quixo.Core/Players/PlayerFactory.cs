@@ -38,6 +38,10 @@ namespace Quixo.Core.Players
             {
                 return CreateEasyAiPlayer(id, name, pieceType);
             }
+            else if (playerType == PlayerType.MediumAi)
+            {
+                return CreateMediumAiPlayer(id, name, pieceType);
+            }
             else if (playerType == PlayerType.HardAi)
             {
                 return CreateHardAiPlayer(id, name, pieceType);
@@ -63,9 +67,14 @@ namespace Quixo.Core.Players
             return new MinMaxAiPlayer(id, name, pieceType, 1);
         }
 
-        public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
+        public Player CreateMediumAiPlayer(int id, string name, PieceType pieceType)
         {
             return new MinMaxAiPlayer(id, name, pieceType, 3);
+        }
+
+        public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
+        {
+            return new MultithreadedMinMaxAiPlayer(id, name, pieceType, 15);
         }
     }
 }

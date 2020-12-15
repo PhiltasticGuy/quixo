@@ -11,6 +11,7 @@ namespace Quixo.Core.Players
         Human,
         RandomAi,
         EasyAi,
-        HardAi
+        MediumAi
+        HardAi,
     }
 }

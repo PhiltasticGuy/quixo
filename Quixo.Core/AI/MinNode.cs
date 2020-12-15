@@ -19,17 +19,17 @@ namespace Quixo.Core.AI
 
         public override Move PickBestMoveFromChildren()
         {
-            Node min = null;
+            Node best = null;
 
             foreach (Node node in Children)
             {
-                if (min == null || node.Value < min.Value)
+                if (best == null || (node?.Value ?? 0) < best.Value)
                 {
-                    min = node;
+                    best = node;
                 }
             }
 
-            return min.Move;
+            return best?.Move ?? this.Move;
         }
     }
 }

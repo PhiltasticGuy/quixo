@@ -205,7 +205,7 @@ namespace Quixo.Core
                 // Ralentir les joueurs IA.
                 if (!HasHumanPlayers())
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(600);
                 }
             }
         }
