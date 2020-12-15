@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Quixo.Core.Players.AI;
+using System;
 
 namespace Quixo.Core.Players
 {
@@ -64,17 +61,17 @@ namespace Quixo.Core.Players
 
         public Player CreateEasyAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, 1);
+            return new SingleThreadMinMaxAiPlayer(id, name, pieceType, 1);
         }
 
         public Player CreateMediumAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, 3);
+            return new MultiThreadMinMaxAiPlayer(id, name, pieceType, 3);
         }
 
         public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MultithreadedMinMaxAiPlayer(id, name, pieceType, 15);
+            return new MultiThreadMinMaxAiPlayer(id, name, pieceType, 4);
         }
     }
 }

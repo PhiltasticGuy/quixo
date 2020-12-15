@@ -1,31 +1,26 @@
-﻿using Quixo.Core.AI;
+﻿using Quixo.Core.Players.AI.MinMax;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace Quixo.Core.Players
+namespace Quixo.Core.Players.AI
 {
-    public class MultithreadedMinMaxAiPlayer : ComputerPlayer
+    public class WorkingMultithreadedMinMaxAiPlayer : ComputerPlayer
     {
-        private static int _maxDepth = 3;
-
-        public static int MaxDepth => _maxDepth;
+        public readonly int MaxDepth = 3;
 
         private Mutex _mutex = new Mutex();
         private bool _isWinFoundSignal = false;
 
-        public MultithreadedMinMaxAiPlayer(int id, string name, PieceType pieceType)
+        public WorkingMultithreadedMinMaxAiPlayer(int id, string name, PieceType pieceType)
             : base(id, name, pieceType)
         {
         }
 
-        public MultithreadedMinMaxAiPlayer(int id, string name, PieceType pieceType, int depth)
+        public WorkingMultithreadedMinMaxAiPlayer(int id, string name, PieceType pieceType, int depth)
             : base(id, name, pieceType)
         {
-            _maxDepth = depth;
+            MaxDepth = depth;
         }
 
         public override bool PlayTurn(QuixoBoard board)
@@ -83,7 +78,7 @@ namespace Quixo.Core.Players
             {
                 PieceType winner = board.GetWinner();
 
-                if (node.Depth == MinMaxAiPlayer.MaxDepth || winner != PieceType.Empty)
+                if (node.Depth == MaxDepth || winner != PieceType.Empty)
                 {
                     node.Value = node.Evaluate(board);
                 }

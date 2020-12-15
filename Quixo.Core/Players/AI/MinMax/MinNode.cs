@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Quixo.Core.AI
+namespace Quixo.Core.Players.AI.MinMax
 {
     public class MinNode : Node
     {
@@ -29,7 +25,7 @@ namespace Quixo.Core.AI
                 }
             }
 
-            return best?.Move ?? this.Move;
+            return best?.Move/* ?? this.Move*/;
         }
     }
 }

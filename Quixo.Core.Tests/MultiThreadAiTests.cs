@@ -1,15 +1,18 @@
-using Quixo.Core.Players;
-using System;
+using Quixo.Core.Players.AI;
 using Xunit;
 
 namespace Quixo.Core.Tests
 {
-    public class QuixoBoardTests
+    public class MultiThreadAiTests
     {
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
         [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        //[InlineData(6)]
+        //[InlineData(7)]
         private void TestAiWin_1Move(int depth)
         {
             var board = new QuixoBoard();
@@ -25,7 +28,7 @@ namespace Quixo.Core.Tests
 
             var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, depth);
+            var player = new MultiThreadMinMaxAiPlayer(2, "AI", playerPieceType, depth);
 
             player.PlayTurn(board);
 
@@ -49,7 +52,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MultiThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 
@@ -70,7 +73,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MultiThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 
@@ -93,7 +96,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new MultiThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 

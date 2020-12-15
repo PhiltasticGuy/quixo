@@ -1,8 +1,6 @@
-﻿using Quixo.Core.Players;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Quixo.Core.AI
+namespace Quixo.Core.Players.AI.MinMax
 {
     public abstract class Node
     {

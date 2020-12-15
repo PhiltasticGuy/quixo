@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Quixo.Core.Players
+﻿namespace Quixo.Core.Players.AI
 {
     public abstract class ComputerPlayer : Player
     {

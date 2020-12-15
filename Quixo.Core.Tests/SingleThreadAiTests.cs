@@ -1,10 +1,11 @@
 using Quixo.Core.Players;
+using Quixo.Core.Players.AI;
 using System;
 using Xunit;
 
 namespace Quixo.Core.Tests
 {
-    public class MultithreadedQuixoBoardTests
+    public class SingleThreadAiTests
     {
         [Theory]
         [InlineData(1)]
@@ -12,8 +13,6 @@ namespace Quixo.Core.Tests
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        [InlineData(6)]
-        [InlineData(7)]
         private void TestAiWin_1Move(int depth)
         {
             var board = new QuixoBoard();
@@ -29,7 +28,7 @@ namespace Quixo.Core.Tests
 
             var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MultithreadedMinMaxAiPlayer(2, "AI", playerPieceType, depth);
+            var player = new SingleThreadMinMaxAiPlayer(2, "AI", playerPieceType, depth);
 
             player.PlayTurn(board);
 
@@ -53,7 +52,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MultithreadedMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 
@@ -74,7 +73,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MultithreadedMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 
@@ -97,7 +96,7 @@ namespace Quixo.Core.Tests
 
             //var playerPieceType = PieceType.Crossmark;
             var opponentPieceType = PieceType.Circle;
-            var player = new MultithreadedMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
+            var player = new SingleThreadMinMaxAiPlayer(2, "AI", PieceType.Crossmark);
 
             player.PlayTurn(board);
 
