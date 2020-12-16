@@ -67,7 +67,7 @@ namespace Quixo.Core.Players
 
         public Player CreateMediumAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(3));
+            return new MinMaxAiPlayer(id, name, pieceType, new SingleThreadMinMaxStrategy(3));
         }
 
         public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)

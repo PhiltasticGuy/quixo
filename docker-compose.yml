@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  quixo.web:
+    image: ${DOCKER_REGISTRY-}quixoweb
+    ports:
+      - "80"
+    build:
+      context: .
+      dockerfile: Quixo.Web/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80

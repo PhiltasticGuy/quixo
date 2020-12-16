@@ -71,7 +71,6 @@ namespace Quixo.Core.Tests
             board.Pieces[21].PieceType = PieceType.Crossmark;
             board.Pieces[22].PieceType = PieceType.Crossmark;
             board.Pieces[23].PieceType = PieceType.Crossmark;
-            board.Pieces[24].PieceType = PieceType.Crossmark;
             board.Pieces[0].PieceType = PieceType.Circle;
             board.Pieces[2].PieceType = PieceType.Circle;
             board.Pieces[3].PieceType = PieceType.Circle;

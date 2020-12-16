@@ -5,14 +5,11 @@
     <RootNamespace>Quixo.Web</RootNamespace>
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <UserSecretsId>cb60f98b-490a-4873-937a-4ee4f111f155</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.2.1" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.2.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
 
   <ItemGroup>

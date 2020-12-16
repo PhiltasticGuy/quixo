@@ -61,6 +61,39 @@ namespace Quixo.Core.Tests
         }
 
         [Fact]
+        private void TestAiWinLose_PreventMakingOpponentWin_EdgeCase2()
+        {
+            var board = new QuixoBoard();
+            board.Pieces[1].PieceType = PieceType.Crossmark;
+            board.Pieces[5].PieceType = PieceType.Crossmark;
+            board.Pieces[11].PieceType = PieceType.Crossmark;
+            board.Pieces[13].PieceType = PieceType.Crossmark;
+            board.Pieces[21].PieceType = PieceType.Crossmark;
+            board.Pieces[22].PieceType = PieceType.Crossmark;
+            board.Pieces[23].PieceType = PieceType.Crossmark;
+            board.Pieces[0].PieceType = PieceType.Circle;
+            board.Pieces[2].PieceType = PieceType.Circle;
+            board.Pieces[3].PieceType = PieceType.Circle;
+            board.Pieces[4].PieceType = PieceType.Circle;
+            board.Pieces[6].PieceType = PieceType.Circle;
+            board.Pieces[10].PieceType = PieceType.Circle;
+            board.Pieces[12].PieceType = PieceType.Circle;
+            board.Pieces[14].PieceType = PieceType.Circle;
+            board.Pieces[15].PieceType = PieceType.Circle;
+            board.Pieces[16].PieceType = PieceType.Circle;
+            board.Pieces[20].PieceType = PieceType.Circle;
+            board.Pieces[24].PieceType = PieceType.Circle;
+
+            var playerPieceType = PieceType.Crossmark;
+            var opponentPieceType = PieceType.Circle;
+            var player = new MinMaxAiPlayer(2, "AI", playerPieceType, new SingleThreadMinMaxStrategy(3));
+
+            player.PlayTurn(board);
+
+            Assert.False(board.CheckPieceWin(opponentPieceType));
+        }
+
+        [Fact]
         private void TestAiBlock_SimpleExample()
         {
             var board = new QuixoBoard();

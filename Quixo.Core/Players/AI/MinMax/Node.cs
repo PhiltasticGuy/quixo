@@ -61,15 +61,32 @@ namespace Quixo.Core.Players.AI.MinMax
                     {
                         count++;
                     }
-                    else
+                    //else
+                    //{
+                    //    value += count;
+                    //    count = 0;
+                    //}
+                }
+
+                if (count == 5)
+                {
+                    if (pieceType == PlayerPieceType)
                     {
-                        value += count;
-                        count = 0;
+                        return int.MaxValue;
                     }
+                    else if (pieceType == OpponentPieceType)
+                    {
+                        return int.MinValue;
+                    }
+                }
+                else
+                {
+                    value += count;
+                    count = 0;
                 }
             }
 
-            value += count;
+            //value += count;
 
             return value;
         }
@@ -88,15 +105,32 @@ namespace Quixo.Core.Players.AI.MinMax
                     {
                         count++;
                     }
-                    else
+                    //else
+                    //{
+                    //    value += count;
+                    //    count = 0;
+                    //}
+                }
+
+                if (count == 5)
+                {
+                    if (pieceType == PlayerPieceType)
                     {
-                        value += count;
-                        count = 0;
+                        return int.MaxValue;
                     }
+                    else if (pieceType == OpponentPieceType)
+                    {
+                        return int.MinValue;
+                    }
+                }
+                else
+                {
+                    value += count;
+                    count = 0;
                 }
             }
 
-            value += count;
+            //value += count;
 
             return value;
         }
@@ -112,15 +146,24 @@ namespace Quixo.Core.Players.AI.MinMax
                 {
                     count++;
                 }
-                else
-                {
-                    value += count;
-                    count = 0;
-                }
             }
 
-            value += count;
-            count = 0;
+            if (count == 5)
+            {
+                if (pieceType == PlayerPieceType)
+                {
+                    return int.MaxValue;
+                }
+                else if (pieceType == OpponentPieceType)
+                {
+                    return int.MinValue;
+                }
+            }
+            else
+            {
+                value += count;
+                count = 0;
+            }
 
             for (int i = 0; i < 5; i++)
             {
@@ -135,7 +178,22 @@ namespace Quixo.Core.Players.AI.MinMax
                 }
             }
 
-            value += count;
+            if (count == 5)
+            {
+                if (pieceType == PlayerPieceType)
+                {
+                    return int.MaxValue;
+                }
+                else if (pieceType == OpponentPieceType)
+                {
+                    return int.MinValue;
+                }
+            }
+            else
+            {
+                value += count;
+                count = 0;
+            }
 
             return value;
         }

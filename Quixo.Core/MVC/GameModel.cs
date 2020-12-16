@@ -56,6 +56,8 @@ namespace Quixo.Core.MVC
             _player2.IsInputRequired = false;
 
             _board.Reset();
+
+            _isGameReady = true;
         }
 
         public void ClearExistingGame()

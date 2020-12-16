@@ -103,7 +103,9 @@ namespace Quixo.Core
                 }
             }
 
-            return moves;
+            // Retourner la liste de mouvements disponibles en désordres comme ça
+            // les parties seront un peu plus intéressantes et moins monotones.
+            return moves.Shuffle();
         }
 
         public void Play(Move move, PieceType pieceType)
