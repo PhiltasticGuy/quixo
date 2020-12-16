@@ -1,8 +1,8 @@
 ﻿namespace Quixo.Core.Players.AI.MinMax
 {
-    public class SingleThreadMinMaxStrategy : MinMaxStrategy
+    public class AlphaBetaStrategy : MinMaxStrategy
     {
-        public SingleThreadMinMaxStrategy(int depth)
+        public AlphaBetaStrategy(int depth)
             : base(depth)
         {
         }

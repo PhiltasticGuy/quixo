@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quixo.Core.Players.AI.MinMax
+﻿namespace Quixo.Core.Players.AI.MinMax
 {
     public abstract class MinMaxStrategy
     {
