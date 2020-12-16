@@ -7,10 +7,10 @@ namespace Quixo.Core.Players.AI.MinMax
 {
     public class MultiThreadMinMaxStrategy : MinMaxStrategy
     {
-        private Mutex _mutex = new Mutex();
-        private bool _isWinFoundSignal = false;
+        private readonly Mutex _mutex = new Mutex();
+        private readonly SingleThreadMinMaxStrategy _internalMinMax;
 
-        private SingleThreadMinMaxStrategy _internalMinMax;
+        private bool _isWinFoundSignal = false;
 
         public MultiThreadMinMaxStrategy(int depth)
             : base(depth)

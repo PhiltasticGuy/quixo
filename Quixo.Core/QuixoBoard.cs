@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Quixo.Core.Players;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Quixo.Core
 {
     public class QuixoBoard
     {
         private const int Width = 5;
+
+        private readonly Stack<(Move, PieceType)> _moveLog = new Stack<(Move, PieceType)>();
         private readonly int[] _perimeterIndexes = {
              0,  1,  2,  3,  4,
              5,              9,
@@ -31,11 +35,6 @@ namespace Quixo.Core
             Pieces = pieces;
         }
 
-        public bool IsPerimeterPiece(int index)
-        {
-            return _perimeterIndexes.Contains(index);
-        }
-
         public QuixoBoard DeepClone()
         {
             QuixoPiece[] pieces = new QuixoPiece[25];
@@ -46,6 +45,11 @@ namespace Quixo.Core
             }
 
             return new QuixoBoard(pieces);
+        }
+
+        public bool IsPerimeterPiece(int index)
+        {
+            return _perimeterIndexes.Contains(index);
         }
 
         public List<Move> GetValidMoves(PieceType pieceType)
@@ -151,6 +155,8 @@ namespace Quixo.Core
             }
 
             Pieces[indexEnd].PieceType = pieceType;
+
+            _moveLog.Push((move, pieceType));
         }
 
         public bool CheckPieceWin(PieceType pieceType)
@@ -182,12 +188,26 @@ namespace Quixo.Core
             return false;
         }
 
+        public bool IsStillEmpty()
+        {
+            foreach (var piece in Pieces)
+            {
+                if (!piece.IsEmptyPiece)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public void Reset()
         {
             for (int i = 0; i < Pieces.Length; i++)
             {
                 Pieces[i].PieceType = PieceType.Empty;
             }
+
+            _moveLog.Clear();
         }
 
         public PieceType GetWinner()
@@ -204,6 +224,17 @@ namespace Quixo.Core
             {
                 return PieceType.Empty;
             }
+        }
+
+        public string GetMoveLog()
+        {
+            StringBuilder sb = new StringBuilder();
+            int counter = _moveLog.Count;
+            foreach (var item in _moveLog)
+            {
+                sb.AppendLine($"{(counter--).ToString().PadLeft(3)} - {item.Item2.ToString().PadRight(9)} => [{item.Item1}]");
+            }
+            return sb.ToString();
         }
     }
 }

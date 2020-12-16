@@ -29,6 +29,10 @@
     font-size: xx-large;
 }
 
+.move-log {
+    font-family: 'consolas';
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

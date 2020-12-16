@@ -1,5 +1,6 @@
 ﻿using Quixo.Core.Players;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Quixo.Core.MVC
@@ -12,7 +13,8 @@ namespace Quixo.Core.MVC
         private Player _player2;
 
         private bool _isGameReady;
-        private bool _isGameRunning;
+        private bool _isGameStarted;
+        private bool _isGamePaused;
         private bool _isPlayer1Turn;
         private Player _winner;
 
@@ -20,9 +22,9 @@ namespace Quixo.Core.MVC
         public Player Winner => (_winner != null ? _winner : CheckGameState());
 
         public bool IsGameReady => _isGameReady;
-        public bool IsGameRunning => _isGameRunning;
+        public bool IsGameStarted => _isGameStarted;
+        public bool IsGamePaused => _isGamePaused;
 
-        public bool HasHumanPlayers() => _player1?.IsHuman == true || _player2?.IsHuman == true;
         public Player CurrentPlayer => (_isPlayer1Turn ? _player1 : _player2);
         public Player OtherPlayer => (!_isPlayer1Turn ? _player1 : _player2);
 
@@ -31,6 +33,9 @@ namespace Quixo.Core.MVC
             ClearExistingGame();
         }
 
+        public bool HasHumanPlayers() => _player1?.IsHuman == true || _player2?.IsHuman == true;
+        public bool TogglePauseState() => _isGamePaused = !_isGamePaused;
+
         public void StartGame()
         {
             if (_player1 == null || _player2 == null)
@@ -38,7 +43,7 @@ namespace Quixo.Core.MVC
                 throw new InvalidOperationException("Une partie ne peut pas être lancée sans avoir deux joueurs d'assignés!");
             }
 
-            _isGameRunning = true;
+            _isGameStarted = true;
 
             NextTurn();
         }
@@ -86,7 +91,8 @@ namespace Quixo.Core.MVC
         private void ResetGameData()
         {
             _isGameReady = false;
-            _isGameRunning = false;
+            _isGameStarted = false;
+            _isGamePaused = false;
 
             _winner = null;
             _isPlayer1Turn = true;
@@ -96,7 +102,7 @@ namespace Quixo.Core.MVC
 
         private void HandleTurns()
         {
-            while (_isGameRunning && CurrentPlayer.PlayTurn(_board) && Winner == null)
+            while (_isGameStarted && CurrentPlayer.PlayTurn(_board) && Winner == null)
             {
                 _isPlayer1Turn = !_isPlayer1Turn;
 
@@ -105,6 +111,8 @@ namespace Quixo.Core.MVC
                 {
                     Thread.Sleep(800);
                 }
+
+                while (_isGamePaused) { }
             }
         }
 

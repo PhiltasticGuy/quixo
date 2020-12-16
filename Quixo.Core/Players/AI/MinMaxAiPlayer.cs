@@ -15,9 +15,21 @@ namespace Quixo.Core.Players.AI
 
         public override bool PlayTurn(QuixoBoard board)
         {
-            Node root = new MaxNode(null, PieceType, 0);
-            _minMaxStrategy.MinMax(board, root);
-            Move bestMove = root.PickBestMoveFromChildren();
+            Move bestMove;
+            if (board.IsStillEmpty())
+            {
+                // Nous rendons le jeu un peu plus intéressant en faisant placer
+                // une pièce aléatoire pour les IA si la grille est encore vide.
+                var moves = board.GetValidMoves(this.PieceType);
+                var selectedMoveIndex = new Random().Next(moves.Count);
+                bestMove = moves[selectedMoveIndex];
+            }
+            else
+            {
+                Node root = new MaxNode(null, PieceType, 0);
+                _minMaxStrategy.MinMax(board, root);
+                bestMove = root.PickBestMoveFromChildren();
+            }
 
             board.Play(bestMove, this.PieceType);
 

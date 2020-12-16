@@ -72,7 +72,7 @@ namespace Quixo.Core.MVC
                 {
                     _selectedPieceIndex = null;
 
-                    toggleValidMoves(index);
+                    ToggleValidMoves(index);
 
                     return new PieceUnselectedResult(index);
                 }
@@ -84,7 +84,7 @@ namespace Quixo.Core.MVC
                     }
 
                     // Désactiver les guides de cases valides.
-                    toggleValidMoves(_selectedPieceIndex.Value);
+                    ToggleValidMoves(_selectedPieceIndex.Value);
                     _gameEngine.Board.Pieces[_selectedPieceIndex.Value].IsSelected = false;
 
                     //PlacePiece(index);
@@ -158,13 +158,13 @@ namespace Quixo.Core.MVC
                 }
 
                 _selectedPieceIndex = index;
-                toggleValidMoves(index);
+                ToggleValidMoves(index);
 
                 return new PieceSelectedResult(_selectedPieceIndex);
             }
         }
 
-        private void toggleValidMoves(int selectedPieceIndex)
+        private void ToggleValidMoves(int selectedPieceIndex)
         {
             int row = selectedPieceIndex / 5;
             int left = row * 5;
