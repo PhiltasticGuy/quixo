@@ -25,7 +25,7 @@ namespace Quixo.Core.Players.AI.MinMax
                 }
             }
 
-            return best?.Move/* ?? this.Move*/;
+            return best?.Move;
         }
     }
 }

@@ -44,16 +44,18 @@ namespace Quixo.Core.Players.AI.MinMax
             var value = 0;
             foreach (var move in moves)
             {
+                QuixoBoard copy = board.DeepClone();
+                copy.Play(move, currentMovePieceType);
+
                 Thread t = new Thread(_ =>
                 {
-                    QuixoBoard copy = board.DeepClone();
-                    copy.Play(move, currentMovePieceType);
-
                     var child = node.CreateChild(move, node.Depth + 1);
                     node.Children.Add(child);
 
+                    int temp = node.CompareValues(value, MinMax(copy, child));
+
                     _mutex.WaitOne();
-                    value = node.CompareValues(value, MinMax(copy, child));
+                    value = temp;
 
                     // Nous signalons à toutes les branches (threads) qu'un node
                     // terminal vient d'être trouvé comme enfant du root. Puisque

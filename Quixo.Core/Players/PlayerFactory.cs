@@ -62,17 +62,17 @@ namespace Quixo.Core.Players
 
         public Player CreateEasyAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, new SingleThreadMinMaxStrategy(1));
+            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(1));
         }
 
         public Player CreateMediumAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, new SingleThreadMinMaxStrategy(3));
+            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(2));
         }
 
         public Player CreateHardAiPlayer(int id, string name, PieceType pieceType)
         {
-            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(4));
+            return new MinMaxAiPlayer(id, name, pieceType, new MultiThreadMinMaxStrategy(3));
         }
     }
 }
