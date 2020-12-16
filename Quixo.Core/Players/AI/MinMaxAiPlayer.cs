@@ -18,6 +18,7 @@ namespace Quixo.Core.Players.AI
             Node root = new MaxNode(null, PieceType, 0);
             _minMaxStrategy.MinMax(board, root);
             Move bestMove = root.PickBestMoveFromChildren();
+
             board.Play(bestMove, this.PieceType);
 
             Console.WriteLine($"{this.Name}: Piece #{bestMove.Index + 1}, {bestMove.Direction}");

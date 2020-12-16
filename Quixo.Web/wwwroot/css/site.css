@@ -24,6 +24,11 @@
     border-bottom-width: 0;
 }
 
+.message-winner {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

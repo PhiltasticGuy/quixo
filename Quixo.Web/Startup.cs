@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quixo.Core;
+using Quixo.Core.MVC;
 
 namespace Quixo.Web
 {
@@ -33,7 +34,7 @@ namespace Quixo.Web
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddTransient<QuixoBoardController>();
+            services.AddTransient<GameController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
