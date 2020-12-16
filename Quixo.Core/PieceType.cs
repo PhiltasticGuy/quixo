@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Quixo.Core
+﻿namespace Quixo.Core
 {
     public enum PieceType
     {

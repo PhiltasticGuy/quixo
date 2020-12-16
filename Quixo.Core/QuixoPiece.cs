@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Quixo.Core
+﻿namespace Quixo.Core
 {
     public class QuixoPiece
     {

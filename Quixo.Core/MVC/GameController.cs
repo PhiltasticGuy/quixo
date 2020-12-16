@@ -1,20 +1,18 @@
 ﻿using Quixo.Core.Players;
 using Quixo.Core.Results;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Timers;
 
 namespace Quixo.Core.MVC
 {
     public class GameController
     {
-        private readonly GameEngine _gameEngine = new GameEngine();
+        private readonly GameModel _gameEngine = new GameModel();
 
         private Timer _timer;
         private int? _selectedPieceIndex;
 
-        public GameEngine Model => _gameEngine;
+        public GameModel Model => _gameEngine;
         public int? SelectedPieceIndex => _selectedPieceIndex;
 
         public void SelectPlayers(PlayerType player1Type, PlayerType player2Type)

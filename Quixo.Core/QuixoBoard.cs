@@ -182,6 +182,14 @@ namespace Quixo.Core
             return false;
         }
 
+        public void Reset()
+        {
+            for (int i = 0; i < Pieces.Length; i++)
+            {
+                Pieces[i].PieceType = PieceType.Empty;
+            }
+        }
+
         public PieceType GetWinner()
         {
             if (CheckPieceWin(PieceType.Circle))
@@ -195,14 +203,6 @@ namespace Quixo.Core
             else
             {
                 return PieceType.Empty;
-            }
-        }
-
-        public void Reset()
-        {
-            for (int i = 0; i < Pieces.Length; i++)
-            {
-                Pieces[i].PieceType = PieceType.Empty;
             }
         }
     }

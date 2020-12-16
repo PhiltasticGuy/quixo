@@ -1,12 +1,10 @@
 ﻿using Quixo.Core.Players;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace Quixo.Core.MVC
 {
-    public class GameEngine
+    public class GameModel
     {
         private readonly QuixoBoard _board = new QuixoBoard();
 
@@ -28,7 +26,7 @@ namespace Quixo.Core.MVC
         public Player CurrentPlayer => (_isPlayer1Turn ? _player1 : _player2);
         public Player OtherPlayer => (!_isPlayer1Turn ? _player1 : _player2);
 
-        public GameEngine()
+        public GameModel()
         {
             ClearExistingGame();
         }
